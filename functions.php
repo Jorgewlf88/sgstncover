@@ -98,6 +98,21 @@ function sgstncover_content_width() {
 }
 add_action( 'after_setup_theme', 'sgstncover_content_width', 0 );
 
+if ( ! function_exists( 'sgstncover_main_content_bootstrap_classes' ) ) :
+/**
+ * Add Bootstrap classes to the main-content-area wrapper.
+ */
+function sgstncover_main_content_bootstrap_classes() {
+	if (is_404()){
+		return 'col-md-12';
+	}
+	if ( is_page_template( 'page-fullwidth.php' ) ) {
+		return 'col-md-12';
+	}
+	return 'col-md-9';
+}
+endif;
+
 /**
  * Register widget area.
  *
@@ -120,9 +135,17 @@ add_action( 'widgets_init', 'sgstncover_widgets_init' );
  * Enqueue scripts and styles.
  */
 function sgstncover_scripts() {
+
+	// Font Awesome 5
+	wp_enqueue_style( 'sgstncover-fontawesome', 'https://use.fontawesome.com/releases/v5.5.0/css/all.css' );
+
+	// Bootstrap 4 default CSS
+	wp_enqueue_style( 'sgstncover-bootstrapcss', 'https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css' );
+
 	wp_enqueue_style( 'sgstncover-style', get_stylesheet_uri() );
 
-	wp_enqueue_script( 'sgstncover-navigation', get_template_directory_uri() . '/js/navigation.js', array(), '20151215', true );
+	// Bootstrap default JS
+	wp_enqueue_script('sgstncover-bootstrapjs', 'https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.bundle.min.js', array('jquery'), '1', true );
 
 	wp_enqueue_script( 'sgstncover-skip-link-focus-fix', get_template_directory_uri() . '/js/skip-link-focus-fix.js', array(), '20151215', true );
 
@@ -159,3 +182,7 @@ if ( defined( 'JETPACK__VERSION' ) ) {
 	require get_template_directory() . '/inc/jetpack.php';
 }
 
+/**
+ * Load custom nav walker
+ */
+require get_template_directory() . '/inc/class-wp-bootstrap-navwalker.php';
