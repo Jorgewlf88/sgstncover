@@ -186,3 +186,32 @@ if ( defined( 'JETPACK__VERSION' ) ) {
  * Load custom nav walker
  */
 require get_template_directory() . '/inc/class-wp-bootstrap-navwalker.php';
+
+
+
+// Menu li Custom Class
+function add_classes_on_li($classes, $item, $args) {
+  $classes[] = 'nav-item';
+  return $classes;
+}
+add_filter('nav_menu_css_class','add_classes_on_li',1,3);
+
+// Menu active Custom Class
+function active_nav_class ($classes, $item) {
+    if (in_array('current_page_item', $classes) ){
+        $classes[] = 'active ';
+    }
+    return $classes;
+}
+add_filter('nav_menu_css_class' , 'active_nav_class' , 10 , 2);
+
+
+// Menu link Custom Class
+function menu_link_class( $atts, $item, $args ) {
+    $class = 'nav-link'; // or something based on $item
+    $atts['class'] = $class;
+    return $atts;
+}
+add_filter( 'nav_menu_link_attributes', 'menu_link_class', 10, 3 );
+
+
